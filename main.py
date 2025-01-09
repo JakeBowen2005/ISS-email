@@ -33,7 +33,19 @@ sunset = float(data["results"]["sunset"].split("T")[1].split(":")[0])
 time_now = datetime.now()
 current_hour = time_now.hour
 
-if (MY_LAT > iss_latitude - 5 and MY_LAT < iss_latitude + 5) and (MY_LONG > iss_longitude-5 and MY_LONG < iss_longitude +5) and (current_hour > sunset):
+def check_lat():
+    if (MY_LAT > iss_latitude - 5) and (MY_LAT < iss_latitude + 5):
+        return True
+    
+def check_long():
+    if (MY_LONG > iss_longitude-5 and MY_LONG < iss_longitude +5):
+        return True
+    
+def check_sun():
+    if (current_hour > sunset or current_hour < sunrise):
+        return True
+
+if check_lat() and check_long() and check_sun():
     connection = smtplib.SMTP("smtp.gmail.com", port=587)
     connection.starttls()
     connection.login(user=my_email, password=password)
